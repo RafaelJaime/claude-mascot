@@ -79,6 +79,17 @@ warm() {
     done <"$config"
 }
 
+# A patched copy is ~250 MB, so costumes nobody wears any more do not get to stay.
+prune() {
+    for binary in "$state"/bin/claude-*; do
+        [ -e "$binary" ] || continue
+        worn="$(basename "$binary")"
+        worn="${worn#claude-}"
+        worn="${worn%%-*}"
+        grep -q "	$worn	" "$config" || rm -f "$binary"
+    done
+}
+
 case "${1:-status}" in
     install)
         [ $# -ge 2 ] || { echo "usage: mascot.sh install <costume> [alias] [config-dir]" >&2; exit 2; }
@@ -86,6 +97,7 @@ case "${1:-status}" in
         register "${3:-claude}" "$2" "${4:-}"
         write_aliases
         warm
+        prune
         echo "claude-mascot: ${3:-claude} now wears the $2 costume — open a new shell to see it"
         ;;
     remove)
@@ -94,12 +106,14 @@ case "${1:-status}" in
         grep -v "^$2	" "$config" >"$tmp" || :
         mv "$tmp" "$config"
         write_aliases
+        prune
         echo "claude-mascot: $2 is back to the stock mascot"
         ;;
     refresh)
         sync_scripts
         write_aliases
         warm
+        prune
         ;;
     hook)
         # Claude Code was just upgraded? Re-patch for the new build without

@@ -1,7 +1,7 @@
 {
   "name": "claude-mascot",
   "description": "Give each Claude Code profile its own startup mascot — tie, pirate hat, crown, halo, shades, or a smaller companion holding its hand — so several terminals are told apart at a glance. Re-applies itself whenever Claude Code updates.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Rafael Jaime Moreno",
     "url": "https://github.com/RafaelJaime"

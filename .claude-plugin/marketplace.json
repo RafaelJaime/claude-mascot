@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-mascot",
+  "description": "Cosmetic startup mascots for Claude Code, so several profiles are told apart at a glance.",
+  "owner": {
+    "name": "Rafael Jaime Moreno",
+    "url": "https://github.com/RafaelJaime"
+  },
+  "plugins": [
+    {
+      "name": "claude-mascot",
+      "description": "Dress the Claude Code startup mascot in a tie or a pirate hat, per profile. Re-applies itself whenever Claude Code updates.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

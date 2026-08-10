@@ -1,0 +1,26 @@
+{
+  "name": "claude-mascot",
+  "description": "Give each Claude Code profile its own startup mascot — a tie, a pirate hat — so two terminals are told apart at a glance. Re-applies itself whenever Claude Code updates.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Rafael Jaime Moreno",
+    "url": "https://github.com/RafaelJaime"
+  },
+  "homepage": "https://github.com/RafaelJaime/claude-mascot",
+  "license": "MIT",
+  "keywords": ["mascot", "cosmetic", "profiles", "macos"],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh\" hook",
+            "timeout": 5,
+            "statusMessage": "Checking the mascot's wardrobe..."
+          }
+        ]
+      }
+    ]
+  }
+}

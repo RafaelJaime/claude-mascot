@@ -30,8 +30,10 @@ if [ ! -x "$real" ]; then
     exit 127
 fi
 
+# Keyed by the upstream build *and* the recipe, so editing a costume rebuilds too.
 build="$(stat -f '%z-%m' "$real")"
-patched="$state/bin/claude-$costume-$build"
+recipe="$(shasum "$scripts/patch.py" | cut -c1-8)"
+patched="$state/bin/claude-$costume-$build-$recipe"
 
 if [ ! -x "$patched" ]; then
     mkdir -p "$state/bin"

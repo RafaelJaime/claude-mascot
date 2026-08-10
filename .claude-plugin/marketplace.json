@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "claude-mascot",
-      "description": "Dress the Claude Code startup mascot in a tie or a pirate hat, per profile. Re-applies itself whenever Claude Code updates.",
+      "description": "Give each Claude Code profile its own startup mascot — tie, pirate hat, crown, halo, shades, or a smaller companion holding its hand — so several terminals are told apart at a glance. Re-applies itself whenever Claude Code updates.",
       "source": "./",
       "category": "productivity"
     }

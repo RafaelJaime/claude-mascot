@@ -4,12 +4,20 @@ Give each Claude Code profile its own startup mascot, so two terminals are told
 apart at a glance.
 
 ```
- ▐▛███▜▌   Claude Code v2.1.220        ▗▄▟███▙▄▖   Claude Code v2.1.220
-▝▜██▄██▛▘  Opus 5 · Claude Max          ▐▛███▜▌    Opus 5 · Claude Max
-  ▘▘▼▝▝    ~/work/personal             ▝▜█████▛▘   ~/work/clients
-                                         ▘▘ ▝▝
-       tie                                    pirate hat
+   ▄█▄█▄█▄         ▗▄▟███▙▄▖          ▗▄▄▄▖
+   ▐▛███▜▌          ▐▛███▜▌          ▐▛███▜▌
+  ▝▜█████▛▘        ▝▜█████▛▘        ▝▜█████▛▘
+    ▘▘ ▝▝            ▘▘ ▝▝            ▘▘ ▝▝
+    crown            pirate            halo
+
+   ▐▛███▜▌          ▐▛███▜▌          ▐▛███▜▌
+  ▝▜██▄██▛▘        ▝▜█▄▄▄█▛▘        ▝▜█████▛▘─▟█▙
+    ▘▘▼▝▝            ▘▘ ▝▝            ▘▘ ▝▝   ▘ ▝
+     tie             shades           buddy
 ```
+
+The crown and halo are gold, the tie is red, the hat is dark — colour comes from
+the theme, so every costume follows light and dark alike.
 
 Purely cosmetic. It never touches your Homebrew install: each costume is a
 patched *copy* of the binary, rebuilt automatically whenever Claude Code updates.
@@ -27,6 +35,10 @@ Then dress your commands:
 /mascot install tie
 /mascot install pirate claude-work ~/.claude-work
 ```
+
+The plugin also ships a skill, so asking Claude to "customise my Claude Code
+mascot" — or to make two profiles tell themselves apart — is enough; it will
+reach for the same commands.
 
 `install <costume> [alias] [config-dir]` wires up a shell alias — the third
 argument sets `CLAUDE_CONFIG_DIR`, which is how you run a second profile. Open a
@@ -95,8 +107,34 @@ already rebuilt by the time you open the next session.
 
 Costumes live in `COSTUMES` in `scripts/patch.py`; each one returns the markup
 edits that put it on the mascot, written against the identifiers found in the
-match. Keep an eye on the byte budget — `patch_region` fails loudly rather than
-producing a broken binary, and `run.sh` falls back to stock when it does.
+match, plus any frame it needs — `{"taller": True}` for a hat's extra row,
+`{"columns": n}` for a companion's extra width. Keep an eye on the byte budget:
+`patch_region` fails loudly rather than producing a broken binary, and `run.sh`
+falls back to stock when it does.
+
+## Prior art
+
+Customising Claude Code's looks is well-trodden ground, and there is no official
+support for it — the request to make the startup mascot configurable
+([#43834](https://github.com/anthropics/claude-code/issues/43834)) was closed as
+a duplicate of a still-open one.
+
+- [tweakcc](https://github.com/Piebald-AI/tweakcc) is the broad, mature tool:
+  themes, system prompts, spinners, thinking verbs, input styling. It patches
+  `cli.js` on npm installs and repacks the native binary with node-lief. It can
+  *hide* the startup logo and change the banner message, but not dress the
+  mascot, and it keeps a single config — no per-profile looks.
+- [claudecode-buddy-crack](https://github.com/Pickle-Pixel/claudecode-buddy-crack)
+  customises the *companion pet* (species, rarity, hats, eyes) by flipping a
+  spread in the binary — same byte-length discipline as here — and re-patches
+  from a `SessionStart` hook.
+- **clawd-modifier**, an openclaw skill, changes the mascot's colours and bolts
+  arms and accessories onto its ASCII art.
+
+What this one does differently: a costume **per profile**, wired through shell
+aliases and `CLAUDE_CONFIG_DIR`; patched builds cached and rebuilt automatically
+per upstream binary; a launch check with a fallback to stock; and structural
+anchors (glyphs and theme colour names) instead of minified identifiers.
 
 ## Disclaimer
 

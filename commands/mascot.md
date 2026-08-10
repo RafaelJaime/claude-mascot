@@ -1,30 +1,38 @@
 ---
-allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh:*)
-description: Dress the Claude Code startup mascot (tie, pirate hat) per profile
-argument-hint: [install <costume> [alias] [config-dir] | remove <alias> | list | status | refresh | uninstall]
+allowed-tools: Bash
+description: Dress the Claude Code startup mascot — tie, pirate hat, crown, halo, shades, buddy
+argument-hint: "[install <costume> [alias] [config-dir] | remove <alias> | refresh | uninstall]"
 ---
 
-## Context
+## Wardrobe
 
-- Current setup: !`"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh" status`
-- Available costumes: !`"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh" list`
+!`"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh" list 2>/dev/null || ~/.claude-mascot/mascot.sh list`
+
+## Currently worn
+
+!`"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh" status 2>/dev/null || ~/.claude-mascot/mascot.sh status`
 
 ## Your task
 
-The user asked: `$ARGUMENTS`
+Arguments: `$ARGUMENTS`
 
-Run the matching `"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh"` subcommand and report the
-result. Use `install <costume> [alias] [config-dir]` to dress a command,
-`remove <alias>` to undo one, `refresh` to re-apply after a Claude Code upgrade,
-and `uninstall` to remove everything.
+**If the arguments are empty** — this is a menu request. Do not call any tool, do
+not investigate anything, do not offer to do the work. Reply immediately with the
+wardrobe and what each command currently wears, both taken from above, and this
+line on how to pick:
 
-If the request is ambiguous, ask which costume and which command name it applies
-to before running anything — `install` rewrites a managed block in the user's
-shell rc.
+    /claude-mascot:mascot install <costume> [command] [config-dir]
 
-Two things to tell the user when a costume is installed:
+with one worked example (`install buddy`, and `install crown claude-work
+~/.claude-work` for a second profile). Then stop. That is the whole reply.
 
-- The costume shows up in a **new** shell, since the alias is read from the shell
-  rc at startup.
-- Anything calling `/opt/homebrew/bin/claude` directly (IDE extensions, scripts,
-  non-interactive shells) bypasses the alias and keeps the stock mascot.
+**If arguments were given**, run exactly one command:
+
+```
+"${CLAUDE_PLUGIN_ROOT}/scripts/mascot.sh" $ARGUMENTS
+```
+
+and report its output in a line or two. No other tools, no follow-up work.
+
+Worth mentioning after an `install`: the costume shows up in a **new** shell,
+since the alias is read from the shell rc at startup.
